@@ -1,7 +1,8 @@
 /*
-g++ main.cpp -o main ; ./main.exe
-
 g++ main.cpp -o main
+g++ main.cpp -o main ; ./main.exe
+g++ main.cpp -o main ; ./main.exe ; python pyView.py
+
 */
 
 #include <fstream>
@@ -26,8 +27,8 @@ std::vector<double> getPwmSignal(const double Ulow_V,const double Uhigh_V,const 
     
     double Tcumul_s = 0;
     double Ton_s = Tsw_s*D_pu;
-    double Toff_s = Tsw_s*(1-D_pu);
-    double Tnextsw_s = Tsw_s*D_pu;
+    double Toff_s = Tsw_s-Ton_s;
+    double Tnextsw_s = Ton_s;
     bool nowHigh = true;
     while(Tcumul_s < Tsim_s){
         if(nowHigh){
@@ -60,10 +61,10 @@ std::vector<double> getPwmSignal(const double Ulow_V,const double Uhigh_V,const 
 int main() {
     int arrSize = 7;
 
-    double Ulow_V = 10;
-    double Uhigh_V = 0;
+    double Ulow_V = 0;
+    double Uhigh_V = 10;
     double fsw_Hz = 10e3;
-    double D_pu = 0.9;
+    double D_pu = 0.75;
     double Tsim_s = 10e-3;
     double Tsimstep_s = 1/(200*fsw_Hz); 
     std::vector<double> pwmSignal = getPwmSignal(Ulow_V, Uhigh_V, fsw_Hz, D_pu, Tsim_s, Tsimstep_s);
