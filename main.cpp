@@ -2,6 +2,7 @@
 g++ main.cpp -o main
 g++ main.cpp -o main ; ./main.exe
 g++ main.cpp -o main ; ./main.exe ; python pyView.py
+g++ main.cpp electricModels.cpp -o main ; ./main.exe ; python pyView.py
 
 */
 
@@ -10,53 +11,14 @@ g++ main.cpp -o main ; ./main.exe ; python pyView.py
 #include <iostream>
 #include <vector>
 #include "jsonExport.h"
+#include "electricModels.h"
 
 template <typename T>
 void printAux(const std::string& myText, const T& myVar){
     std::cout << myText <<": " <<myVar << std::endl;
 }
 
-std::vector<double> getPwmSignal(const double Ulow_V,const double Uhigh_V,const double fsw_Hz,const double D_pu, const double Tsim_s, const double Tsimstep_s){
-    double Tsw_s = 1/fsw_Hz;
-    
-    int nrSamples = Tsim_s/Tsimstep_s;
-    int idx = 0;
-    
-    std::vector<double> vecPwmSignal;
-    vecPwmSignal.resize(nrSamples);
-    
-    double Tcumul_s = 0;
-    double Ton_s = Tsw_s*D_pu;
-    double Toff_s = Tsw_s-Ton_s;
-    double Tnextsw_s = Ton_s;
-    bool nowHigh = true;
-    while(Tcumul_s < Tsim_s){
-        if(nowHigh){
-            vecPwmSignal[idx++] = Uhigh_V;
-        } else {
-            vecPwmSignal[idx++] = Ulow_V;
-        }
-        
-        Tcumul_s += Tsimstep_s;
-        if(Tcumul_s > Tnextsw_s){
-            if(nowHigh){
-                Tnextsw_s += Toff_s;
-            } else {
-                Tnextsw_s += Ton_s;
-            }
-            nowHigh = !nowHigh;
-        }
-    }
-    
-    printAux("Tsim_s",Tsim_s);
-    printAux("Tsimstep_s",Tsimstep_s);
-    printAux("nrSamp",nrSamples);
-    printAux("vecPwmLen",vecPwmSignal.size());
-    printAux("vecPwm",vecPwmSignal[0]);
-    printAux("vecPwm",vecPwmSignal[30]);
-    
-    return vecPwmSignal;
-}
+
 
 int main() {
     int arrSize = 7;
