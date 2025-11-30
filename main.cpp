@@ -18,48 +18,6 @@ g++ main.cpp electricModels.cpp -o main ; ./main.exe ; python pyView.py
 
 
 
-class TransferFunctionRC{
-    private:
-    double C_F = 0;
-    double R_ohm = 0;
-    double Tsamp_s = 0;
-    double k0 = 0;
-    double k1 = 0;
-    double k2 = 0;
-
-    double Uin1 = 0;
-    double Uon1 = 0;
-
-
-    public:
-    TransferFunctionRC(double aC_F, double aR_ohm, double aTsamp_s){
-        C_F = aC_F;
-        R_ohm = aR_ohm;
-        Tsamp_s = aTsamp_s;
-
-        double w0 = 1/(R_ohm*C_F);
-        double b0 = w0*Tsamp_s;
-        double b1 = b0;
-        double a0 = (2+b0);
-        double a1 = (b0-2);
-
-
-        k0 = b0/a0;
-        k1 = b1/a0;
-        k2 = a1/a0;
-
-    }
-
-    double runSample(const double Uin_V){
-        double Uo_V = k0*Uin_V + k1*Uin1 - k2*Uon1;
-        Uin1 = Uin_V;
-        Uon1 = Uo_V;
-        return Uo_V;
-    }
-
-
-};
-
 
 
 int main() {
