@@ -2,4 +2,6 @@
 *.log
 *.bkp
 *.exe
+*.tmp
+*.net
 output.json
