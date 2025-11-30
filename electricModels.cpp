@@ -34,3 +34,42 @@ std::vector<double> getPwmSignal(const double Ulow_V,const double Uhigh_V,const 
     
     return vecPwmSignal;
 }
+
+
+
+TransferFunctionRC::TransferFunctionRC(double aC_F, double aR_ohm, double aTsamp_s)
+{
+    C_F = aC_F;
+    R_ohm = aR_ohm;
+    Tsamp_s = aTsamp_s;
+    Uin1 = 0.0;
+    Uon1 = 0.0;
+
+
+    double w0 = 1.0 / (R_ohm * C_F);
+    double b0 = w0 * Tsamp_s;
+    double b1 = b0;
+    double a0 = (2.0 + b0);
+    double a1 = (b0 - 2.0);
+
+    k0 = b0/a0;
+    k1 = b1/a0;
+    k2 = a1/a0;
+}
+
+double TransferFunctionRC::runSample(const double Uin_V) {
+    double Uo_V = k0 * Uin_V + k1 * Uin1 - k2 * Uon1;
+    Uin1 = Uin_V;
+    Uon1 = Uo_V;
+    return Uo_V;
+}
+
+std::vector<double> TransferFunctionRC::runSignal(const std::vector<double>& inputSignal) {
+    long nrSamples = inputSignal.size();
+    std::vector<double> outputSamples(nrSamples);
+
+    for (long i = 0; i < nrSamples; i++) {
+        outputSamples[i] = runSample(inputSignal[i]);
+    }
+    return outputSamples;
+}
