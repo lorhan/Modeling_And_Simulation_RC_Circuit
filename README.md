@@ -6,5 +6,5 @@ At the time of writing, the usage is as follows:
 2. Running the executable: use "./main.exe" to run the executable, which will write the desired signals from the simulation to the file "output.json"
 3. Viewing the results: use "python pyViewer.py" to view the results of the simulation with matplotlib.
 
-The following DrawIO diagram illustrates the math used for the modeling and simulation. It
+The following DrawIO diagram illustrates the math used for the modeling and simulation:
 !["Pipeline" for the modeling and simulation approach used](ModelSimRC.drawio.svg)
