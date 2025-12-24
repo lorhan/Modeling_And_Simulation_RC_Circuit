@@ -3,8 +3,8 @@
 std::vector<double> getPwmSignal(const double Ulow_V,const double Uhigh_V,const double fsw_Hz,const double D_pu, const double Tsim_s, const double Tsimstep_s){
     double Tsw_s = 1/fsw_Hz;
     
-    int nrSamples = Tsim_s/Tsimstep_s;
-    int idx = 0;
+    size_t nrSamples = Tsim_s/Tsimstep_s;
+    size_t idx = 0;
     
     std::vector<double> vecPwmSignal;
     vecPwmSignal.resize(nrSamples);
@@ -65,10 +65,10 @@ double TransferFunctionRC::runSample(const double Uin_V) {
 }
 
 std::vector<double> TransferFunctionRC::runSignal(const std::vector<double>& inputSignal) {
-    long nrSamples = inputSignal.size();
+    size_t nrSamples = inputSignal.size();
     std::vector<double> outputSamples(nrSamples);
 
-    for (long i = 0; i < nrSamples; i++) {
+    for (size_t i = 0; i < nrSamples; i++) {
         outputSamples[i] = runSample(inputSignal[i]);
     }
     return outputSamples;
